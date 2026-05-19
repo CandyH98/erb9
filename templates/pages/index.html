@@ -1,6 +1,7 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block content %}
+
     <!-- Showcase -->
     <section id="showcase">
       <div class="container text-center">
@@ -13,8 +14,7 @@
               tempore! Consectetur, id commodi!
             </p>
             <div class="search">
-              {% comment %} fix search.html {% endcomment %}
-              <form action="search.html">
+              <form action={% url "listings:search" %}>
                 <!-- Form Row 1 -->
                 <div class="form-row">
                   <div class="col-md-12 mb-3">
@@ -23,7 +23,7 @@
                       type="text"
                       name="keywords"
                       class="form-control"
-                      placeholder="Keyword (Clinic, Doctor, City name, Town name, etc)"
+                      placeholder="Keyword (Clinic Title, Doctor, Description, etc)"
                     />
                   </div>
                 </div>
@@ -35,52 +35,30 @@
                       <option selected="true" disabled="disabled">
                         District (All)
                       </option>
-                      <option value="IL">Islands</option>
-                      <option value="KT">Kwai Tsing</option>
-                      <option value="NR">North</option>
-                      <option value="SK">Sai Kung</option>
-                      <option value="ST">Sha Tin</option>
-                      <option value="TP">Tai Po</option>
-                      <option value="TW">Tsuen Wan</option>
-                      <option value="TM">Tuen Mun</option>
-                      <option value="YL">Yuen Long</option>
-                      <option value="KC">Kowloon City</option>
-                      <option value="KW">Kwun Tong</option>
-                      <option value="SS">Sham Shui Po</option>
-                      <option value="WT">Wong Tai Sin</option>
-                      <option value="YM">Yau Tsim Mong</option>
-                      <option value="CW">Central & Western</option>
-                      <option value="ER">Eastern</option>
-                      <option value="SR">Southern</option>
-                      <option value="WC">Wan Chai</option>
+                      {% for key,value in district_choices.items %}
+                      <option value="{{key}}">{{value}}</option>
+                      {% endfor %}
                     </select>
                   </div>
                   <div class="col-md-4 mb-3">
-                    <label class="sr-only">Bedrooms</label>
-                    <select name="bedrooms" class="form-control">
+                    <label class="sr-only">Rooms</label>
+                    <select name="rooms" class="form-control">
                       <option selected="true" disabled="disabled">
-                        Night (All)
+                        Rooms (All)
                       </option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
+                      {% for key, value in rooms_choices.items %}
+                      <option value="{{key}}">{{value}}</option>
+                      {% endfor %}
                     </select>
                   </div>
                   <div class="col-md-4 mb-3">
-                    <select name="price" class="form-control" id="type">
+                    <select name="room_type" class="form-control" id="type">
                       <option selected="true" disabled="disabled">
-                        Bedrooms (All)
+                        Room Type (All)
                       </option>
-                      <option value="1">Private Rooms</option>
-                      <option value="2">Semi-Private Rooms</option>
-                      <option value="3">Standard (Multi-bed) Rooms</option>
+                      {% for key, value in room_type_choices.items %}
+                      <option value="{{key}}">{{value}}</option>
+                      {% endfor %}
                     </select>
                   </div>
                 </div>
@@ -100,21 +78,23 @@
         <h3 class="text-center mb-3">Inpatient medical services</h3>
         <div class="row">
           <!-- Listing 1 -->
+          {% if listings %}
+          {% for listing in listings %}
           <div class="col-md-6 col-lg-4 mb-4">
             <div class="card listing-preview">
               {% comment %} fix img.html {% endcomment %}
               <img
                 class="card-img-top"
-                src="assets/img/clinics/clinic-1.jpg"
+                src="{{listing.photo_main.url}}"
                 alt=""
               />
               <div class="card-img-overlay">
               </div>
               <div class="card-body">
                 <div class="listing-heading text-center">
-                  <h4 class="text-primary">Harmony Health Clinic</h4>
+                  <h4 class="text-primary">{{listing.title | title}}</h4>
                   <p>
-                    <i class="fas fa-map-marker text-secondary"></i> Kowloon Bay
+                    <i class="fas fa-map-marker text-secondary"></i> {{listing.district | title}}
                   </p>
                 </div>
                 <hr />
@@ -136,131 +116,26 @@
                 </div>
                 <hr />
                 <div class="row py-2 text-secondary">
-                  <div class="col-12"><i class="fas fa-user"></i> Ms. Ma</div>
+                  <div class="col-12"><i class="fas fa-user"></i>{{listing.doctor.name}}</div>
                 </div>
                 <div class="row text-secondary pb-2">
                   <div class="col-12">
-                    <i class="fas fa-clock"></i> Reservation required
+                    <i class="fas fa-clock"></i>{{listing.list_date | timesince}}
                   </div>
                 </div>
                 <hr />
-                {% comment %} fix listing.html {% endcomment %}
-                <a href="listing.html" class="btn btn-primary btn-block"
+                <a href="{% url 'listings:listing' listing.id %}" class="btn btn-primary btn-block"
                   >More Info</a
                 >
               </div>
             </div>
           </div>
-
-          <!-- Listing 2 -->
-          <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card listing-preview">
-              {% comment %} fix img.html {% endcomment %}
-              <img
-                class="card-img-top"
-                src="assets/img/clinics/clinic-2.jpg"
-                alt=""
-              />
-              <div class="card-img-overlay">
-              </div>
-              <div class="card-body">
-                <div class="listing-heading text-center">
-                  <h4 class="text-primary">Evercare Medical Center</h4>
-                  <p>
-                    <i class="fas fa-map-marker text-secondary"></i> Kowloon
-                    City
-                  </p>
-                </div>
-                <hr />
-                <div class="row py-2 text-secondary">
-                  <div class="col-6">
-                    <i class="fas fa-th-large"></i> Restrooms
-                  </div>
-                  <div class="col-6">
-                    <i class="fas fa-dumbbell"></i> Treatment 
-                  </div>
-                </div>
-                <div class="row py-2 text-secondary">
-                  <div class="col-6">
-                    <i class="fas fa-bed"></i> Bedrooms
-                  </div>
-                  <div class="col-6">
-                    <i class="fas fa-bath"></i> Bathrooms
-                  </div>
-                </div>
-                <hr />
-                <div class="row py-2 text-secondary">
-                  <div class="col-12">
-                    <i class="fas fa-user"></i> Ms. Chung
-                  </div>
-                </div>
-                <div class="row text-secondary pb-2">
-                  <div class="col-12">
-                    <i class="fas fa-clock"></i> Reservation required
-                  </div>
-                </div>
-                <hr />
-                {% comment %} fix listing.html {% endcomment %}
-                <a href="listing.html" class="btn btn-primary btn-block"
-                  >More Info</a
-                >
-              </div>
-            </div>
+          {% endfor %}
+          {% else %}
+          <div class ="col-md-12">
+          <h2>no Clinic Available!</h2>
           </div>
-
-          <!-- Listing 3 -->
-          <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card listing-preview">
-              {% comment %} fix img.html {% endcomment %}
-              <img
-                class="card-img-top"
-                src="assets/img/clinics/clinic-3.jpg"
-                alt=""
-              />
-              <div class="card-img-overlay">
-              </div>
-              <div class="card-body">
-                <div class="listing-heading text-center">
-                  <h4 class="text-primary">VitalPath Wellness Clinic</h4>
-                  <p>
-                    <i class="fas fa-map-marker text-secondary"></i> Sham Shui
-                    Po
-                  </p>
-                </div>
-                <hr />
-                <div class="row py-2 text-secondary">
-                  <div class="col-6">
-                    <i class="fas fa-th-large"></i> Restrooms
-                  </div>
-                  <div class="col-6">
-                    <i class="fas fa-dumbbell"></i> Treatment 
-                  </div>
-                </div>
-                <div class="row py-2 text-secondary">
-                  <div class="col-6">
-                    <i class="fas fa-bed"></i> Bedrooms
-                  </div>
-                  <div class="col-6">
-                    <i class="fas fa-bath"></i> Bathrooms
-                  </div>
-                </div>
-                <hr />
-                <div class="row py-2 text-secondary">
-                  <div class="col-12"><i class="fas fa-user"></i> Ms. Chan</div>
-                </div>
-                <div class="row text-secondary pb-2">
-                  <div class="col-12">
-                    <i class="fas fa-clock"></i> Reservation required
-                  </div>
-                </div>
-                <hr />
-                {% comment %} fix listing.html {% endcomment %}
-                <a href="listing.html" class="btn btn-primary btn-block"
-                  >More Info</a
-                >
-              </div>
-            </div>
-          </div>
+          {% endif %}
         </div>
       </div>
     </section>
