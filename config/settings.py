@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from django.contrib.messages import constants as messages
 from pathlib import Path
 from xmlrpc.client import APPLICATION_ERROR
 from dotenv import load_dotenv
@@ -47,6 +48,7 @@ APPLICATION_APPS = [
     'pages.apps.PagesConfig',
     'doctors.apps.DoctorsConfig',
     'listings.apps.ListingsConfig',
+    'accounts.apps.AccountsConfig',
 ]
 THIRD_PARTY_APPS = [
     'debug_toolbar',
@@ -148,3 +150,8 @@ INTERNAL_IPS = [
 
 MEDIA_ROOT= os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+    messages.SUCCESS: 'success',
+}

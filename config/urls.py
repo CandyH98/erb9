@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('',include('pages.urls', namespace='pages')),
     path('listings/',include('listings.urls', namespace='listings')),
+    path('account/',include('accounts.urls', namespace='accounts')),
     path('admin/', admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + debug_toolbar_urls()
 
