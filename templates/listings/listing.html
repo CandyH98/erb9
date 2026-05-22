@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load humanize %}
+{% block title %} | {{listing.title | title}}{% endblock %}
 {% block content %}
 
     <section id="showcase-inner" class="py-5 text-white">
@@ -128,10 +129,14 @@
                     <span class="float-right">Private</span>
                   </li>
                   <li class="list-group-item text-secondary">
-                    {% comment %} room {% endcomment %}
-                    <i class="fas fa-dumbbell"></i> Treatment:
-                    {% comment %} room {% endcomment %}
-                    <span class="float-right"> Have </span>
+                    <i class="fas fa-bed"></i> Services:
+                    {% if listing.services.all %}
+                    {% for services_tag in listing.services.all %}
+                    <span class="float-right">{{services_tag.name}}</span><br>
+                    {% endfor %}
+                    {% else %}
+                    <span class="float-right">NO Services</span>
+                    {% endif %}
                   </li>
                 </ul>
               </div>
@@ -175,12 +180,10 @@
             <div class="card mb-3">
               <img
                 class="card-img-top"
-                {% comment %} img {% endcomment %}
                 src={{listing.doctor.photo.url}}
                 alt="Doctor of the month"
               />
               <div class="card-body">
-                {% comment %} doctors {% endcomment %}
                 <h5 class="card-title">Medical Practitioner</h5>
                 <h6 class="text-secondary">{{listing.doctor.name}}</h6>
               </div>

@@ -13,10 +13,10 @@
                         <!--form error-->
                         {% if form.message.errors %}
                             <div class="text-danger mb-2">{{form.message.errors}}</div>
-                            {% endif %}{{form.message | add_class:"form-control"}}
+                            {% endif %}
+                            {{form.message | add_class:"form-control"}}
                     </div>
                             <button class="btn btn-primary w-100" type="submit">Submit</button>
-                    
                 </form>
             </div>
         </div>
