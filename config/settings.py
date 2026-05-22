@@ -49,9 +49,11 @@ APPLICATION_APPS = [
     'doctors.apps.DoctorsConfig',
     'listings.apps.ListingsConfig',
     'accounts.apps.AccountsConfig',
+    'contacts.apps.ContactsConfig',
 ]
 THIRD_PARTY_APPS = [
     'debug_toolbar',
+    'widget_tweaks',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + APPLICATION_APPS + THIRD_PARTY_APPS
@@ -155,3 +157,10 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
     messages.SUCCESS: 'success',
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True

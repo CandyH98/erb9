@@ -30,7 +30,7 @@
             {%comment%} add login {%endcomment%}
               <li {% if 'dashboard' in request.path %} class="nav-item active mr-3" {% else %} class="nav-item mr-3" {% endif %}>
                 <a class="nav-link" href="{% url 'accounts:dashboard' %}">
-                  <i class="fas fa-th-large"></i> Dashboard
+                  <i class="fas fa-th-large"></i> {{user.username}} 's Dashboard
               </a>
             </li>
             {%comment%} add logout {%endcomment%}
